@@ -1,6 +1,6 @@
-package fastrack.stardrinks.dao;
+package fastrack.stardrinks.repository;
 
-import fastrack.stardrinks.entity.Drink;
+import fastrack.stardrinks.model.Drink;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

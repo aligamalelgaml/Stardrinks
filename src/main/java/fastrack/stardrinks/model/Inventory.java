@@ -1,4 +1,4 @@
-package fastrack.stardrinks.entity;
+package fastrack.stardrinks.model;
 
 import jakarta.persistence.*;
 

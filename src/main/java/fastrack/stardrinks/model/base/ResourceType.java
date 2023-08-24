@@ -1,4 +1,4 @@
-package fastrack.stardrinks.base;
+package fastrack.stardrinks.model.base;
 
 public enum ResourceType {
     DRINKS,

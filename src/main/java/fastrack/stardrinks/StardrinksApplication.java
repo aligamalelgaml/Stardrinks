@@ -1,10 +1,9 @@
 package fastrack.stardrinks;
 
-import fastrack.stardrinks.dao.CoffeeBeanDAO;
-import fastrack.stardrinks.dao.ShopOrderDAO;
-import fastrack.stardrinks.entity.Inventory;
-import fastrack.stardrinks.entity.OrderItem;
-import fastrack.stardrinks.entity.ShopOrder;
+import fastrack.stardrinks.repository.ShopOrderDAO;
+import fastrack.stardrinks.model.Inventory;
+import fastrack.stardrinks.model.OrderItem;
+import fastrack.stardrinks.model.ShopOrder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,14 +22,11 @@ public class StardrinksApplication {
 	}
 
 	private void doing(ShopOrderDAO shopOrderDAO) {
-		UUID coffee1id = UUID.fromString("237c6c42-3f19-418f-b1ca-1a86292a542f");
-		UUID drink1id = UUID.fromString("443bb89e-e356-4af6-a609-75f33cc1c68e");
+		UUID coffee1id = UUID.fromString("0612dcbe-354e-43f1-bac8-10f34bad24e2");
+		UUID drink1id = UUID.fromString("31b4669c-bde9-4f43-9998-2742bff2b11c");
 
-		Inventory coffee1 = new Inventory(coffee1id);
-		Inventory drink1 = new Inventory(drink1id);
-
-		OrderItem item = new OrderItem(coffee1, 2);
-		OrderItem item2 = new OrderItem(drink1, 3);
+		OrderItem item = new OrderItem(coffee1id, 2);
+		OrderItem item2 = new OrderItem(drink1id, 3);
 
 		ShopOrder order = new ShopOrder();
 

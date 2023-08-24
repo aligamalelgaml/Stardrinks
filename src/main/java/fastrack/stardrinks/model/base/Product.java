@@ -1,4 +1,4 @@
-package fastrack.stardrinks.base;
+package fastrack.stardrinks.model.base;
 
 import jakarta.persistence.*;
 
@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
-public class Product {
+public abstract class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

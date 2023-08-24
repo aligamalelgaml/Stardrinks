@@ -1,6 +1,6 @@
-package fastrack.stardrinks.entity;
+package fastrack.stardrinks.model;
 
-import fastrack.stardrinks.base.Product;
+import fastrack.stardrinks.model.base.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 

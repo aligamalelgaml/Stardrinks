@@ -1,13 +1,13 @@
-package fastrack.stardrinks.entity;
+package fastrack.stardrinks.model;
 
 import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Embeddable
 public class OrderItem {
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Inventory product;
+    private UUID productId;
 
     @Column(name = "quantity")
     private int orderQuantity;
@@ -15,17 +15,17 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(Inventory product, int quantity) {
-        this.product = product;
+    public OrderItem(UUID productId, int quantity) {
+        this.productId = productId;
         this.orderQuantity = quantity;
     }
 
-    public Inventory getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
 
-    public void setProduct(Inventory product) {
-        this.product = product;
+    public void setProductId(UUID productId) {
+        this.productId = productId;
     }
 
     public int getOrderQuantity() {
@@ -39,7 +39,7 @@ public class OrderItem {
     @Override
     public String toString() {
         return "OrderItem{" +
-                "product=" + product +
+                "productId=" + productId +
                 ", quantity=" + orderQuantity +
                 '}';
     }

@@ -1,7 +1,8 @@
-package fastrack.stardrinks.entity;
+package fastrack.stardrinks.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,17 +17,21 @@ public class ShopOrder {
 
     @Column(name = "order_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
     private List<OrderItem> orderItems;
 
+    @PrePersist
+    private void timestamp() {
+        this.orderDate = LocalDateTime.now();
+    }
+
 
 
     public ShopOrder() {
         this.orderItems = new ArrayList<>();
-        this.orderDate = new Date();
     }
 
     public void addItem(OrderItem item) {
