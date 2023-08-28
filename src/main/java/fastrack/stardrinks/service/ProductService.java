@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,6 +33,18 @@ public class ProductService {
         this.goodieDAO = goodieDAO;
         this.drinkDAO = drinkDAO;
         this.inventoryDAO = inventoryDAO;
+    }
+
+    public List<Drink> getAllDrinks() {
+        return this.drinkDAO.findAll();
+    }
+
+    public List<CoffeeBean> getAllCoffeeBeans() {
+        return this.coffeeBeanDAO.findAll();
+    }
+
+    public List<Goodie> getAllGoodies() {
+        return this.goodieDAO.findAll();
     }
 
     /***
@@ -69,6 +83,16 @@ public class ProductService {
     @Transactional
     public void addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type) {
         this.addProduct(name, startMonth, endMonth, type, 50);
+    }
+
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+
+        products.addAll(this.getAllDrinks());
+        products.addAll(this.getAllGoodies());
+        products.addAll(this.getAllCoffeeBeans());
+
+        return products;
     }
 
 }
