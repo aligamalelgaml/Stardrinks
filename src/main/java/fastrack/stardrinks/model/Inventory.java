@@ -23,8 +23,8 @@ public class Inventory {
         this.name = name;
     }
 
-    @Column(name = "quantity")
-    int quantity;
+    @Column(name = "stock")
+    int stock;
 
     public Inventory() {
     }
@@ -41,12 +41,12 @@ public class Inventory {
         this.id = id;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getStock() {
+        return stock;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setStock(int quantity) {
+        this.stock = quantity;
     }
 
     @Override
