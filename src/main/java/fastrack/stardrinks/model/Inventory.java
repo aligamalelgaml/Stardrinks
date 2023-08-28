@@ -8,7 +8,6 @@ import java.util.UUID;
 public class Inventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     UUID id;
 
@@ -29,8 +28,10 @@ public class Inventory {
     public Inventory() {
     }
 
-    public Inventory(UUID id) {
+    public Inventory(UUID id, String name, int stock) {
         this.id = id;
+        this.name = name;
+        this.stock = stock;
     }
 
     public UUID getId() {

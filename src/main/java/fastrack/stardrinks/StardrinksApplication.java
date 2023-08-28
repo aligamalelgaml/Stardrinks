@@ -1,15 +1,12 @@
 package fastrack.stardrinks;
 
-import fastrack.stardrinks.repository.ShopOrderDAO;
-import fastrack.stardrinks.model.Inventory;
-import fastrack.stardrinks.model.OrderItem;
-import fastrack.stardrinks.model.ShopOrder;
+import fastrack.stardrinks.model.base.ResourceType;
+import fastrack.stardrinks.service.ProductService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.UUID;
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class StardrinksApplication {
@@ -17,26 +14,37 @@ public class StardrinksApplication {
 	public static void main(String[] args) { SpringApplication.run(StardrinksApplication.class, args); }
 
 	@Bean
-	public CommandLineRunner commandLineRunner(ShopOrderDAO shopOrderDAO) {
-		return runner -> doing(shopOrderDAO);
+	public CommandLineRunner commandLineRunner(ProductService productService) {
+		return runner -> init(productService);
 	}
 
-	private void doing(ShopOrderDAO shopOrderDAO) {
-		UUID coffee1id = UUID.fromString("0612dcbe-354e-43f1-bac8-10f34bad24e2");
-		UUID drink1id = UUID.fromString("31b4669c-bde9-4f43-9998-2742bff2b11c");
+	/**
+	 * Simple function used to init the DB.
+	 */
+	private void init(ProductService productService) {
+		// Beans
+		productService.addProduct("Sumatra", LocalDate.parse("2023-04-01"), LocalDate.parse("2023-09-30"), ResourceType.BEANS);
+		productService.addProduct("Espresso", LocalDate.parse("2023-02-01"), LocalDate.parse("2023-11-30"), ResourceType.BEANS);
+		productService.addProduct("Guatemala", LocalDate.parse("2023-05-01"), LocalDate.parse("2023-08-31"), ResourceType.BEANS);
+		productService.addProduct("Colombian", LocalDate.parse("2023-03-01"), LocalDate.parse("2023-10-31"), ResourceType.BEANS);
+		productService.addProduct("Arabica", LocalDate.parse("2023-01-01"), LocalDate.parse("2023-12-31"), ResourceType.BEANS);
+		productService.addProduct("Ethiopian", LocalDate.parse("2023-06-01"), LocalDate.parse("2023-07-31"), ResourceType.BEANS);
 
-		OrderItem item = new OrderItem(coffee1id, 2);
-		OrderItem item2 = new OrderItem(drink1id, 3);
+		// Drinks
+		productService.addProduct("Cranberry Spritzer", LocalDate.parse("2023-11-01"), LocalDate.parse("2023-12-31"), ResourceType.DRINKS);
+		productService.addProduct("Iced Ginger Lemonade", LocalDate.parse("2023-06-01"), LocalDate.parse("2023-09-30"), ResourceType.DRINKS);
+		productService.addProduct("Mango Lassi", LocalDate.parse("2023-05-01"), LocalDate.parse("2023-08-31"), ResourceType.DRINKS);
+		productService.addProduct("Sparkling Apple Cider", LocalDate.parse("2023-10-01"), LocalDate.parse("2023-12-31"), ResourceType.DRINKS);
+		productService.addProduct("Pumpkin Spice Latte", LocalDate.parse("2023-09-01"), LocalDate.parse("2023-11-30"), ResourceType.DRINKS);
+		productService.addProduct("Iced Peppermint Mocha", LocalDate.parse("2023-12-01"), LocalDate.parse("2023-02-28"), ResourceType.DRINKS);
 
-		ShopOrder order = new ShopOrder();
-
-		order.addItem(item);
-		order.addItem(item2);
-
-		shopOrderDAO.save(order);
-
-		System.out.println(shopOrderDAO.findById(order.getId()));
-
+		// Goodies
+		productService.addProduct("Peppermint Brownie", LocalDate.parse("2023-12-01"), LocalDate.parse("2023-02-28"), ResourceType.GOODIES);
+		productService.addProduct("Lemon Poppy Seed Muffin", LocalDate.parse("2023-06-01"), LocalDate.parse("2023-09-30"), ResourceType.GOODIES);
+		productService.addProduct("Cranberry Scone", LocalDate.parse("2023-11-01"), LocalDate.parse("2023-12-31"), ResourceType.GOODIES);
+		productService.addProduct("Caramel Apple Pie", LocalDate.parse("2023-10-01"), LocalDate.parse("2023-12-31"), ResourceType.GOODIES);
+		productService.addProduct("Mango Cheesecake", LocalDate.parse("2023-05-01"), LocalDate.parse("2023-08-31"), ResourceType.GOODIES);
+		productService.addProduct("Pumpkin Donut", LocalDate.parse("2023-09-01"), LocalDate.parse("2023-11-30"), ResourceType.GOODIES);
 	}
 
 }

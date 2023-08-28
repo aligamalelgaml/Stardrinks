@@ -10,14 +10,14 @@ public class OrderItem {
     private UUID productId;
 
     @Column(name = "quantity")
-    private int orderQuantity;
+    private int itemQuantity;
 
     public OrderItem() {
     }
 
     public OrderItem(UUID productId, int quantity) {
         this.productId = productId;
-        this.orderQuantity = quantity;
+        this.itemQuantity = quantity;
     }
 
     public UUID getProductId() {
@@ -28,19 +28,19 @@ public class OrderItem {
         this.productId = productId;
     }
 
-    public int getOrderQuantity() {
-        return orderQuantity;
+    public int getItemQuantity() {
+        return itemQuantity;
     }
 
-    public void setOrderQuantity(int orderQuantity) {
-        this.orderQuantity = orderQuantity;
+    public void setItemQuantity(int itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     @Override
     public String toString() {
         return "OrderItem{" +
                 "productId=" + productId +
-                ", quantity=" + orderQuantity +
+                ", quantity=" + itemQuantity +
                 '}';
     }
 }

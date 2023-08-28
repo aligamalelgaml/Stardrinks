@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class ShopOrder {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -30,7 +29,7 @@ public class ShopOrder {
 
 
 
-    public ShopOrder() {
+    public Order() {
         this.orderItems = new ArrayList<>();
     }
 
