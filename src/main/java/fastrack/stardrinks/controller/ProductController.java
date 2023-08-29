@@ -1,5 +1,6 @@
 package fastrack.stardrinks.controller;
 
+import fastrack.stardrinks.dto.ProductDTO;
 import fastrack.stardrinks.model.Order;
 import fastrack.stardrinks.model.base.Product;
 import fastrack.stardrinks.model.base.ResourceType;
@@ -10,9 +11,7 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -35,4 +34,11 @@ public class ProductController {
     public ResponseEntity<Map<ResourceType, List<? extends Product>>> getMenu() {
         return new ResponseEntity<>(this.productService.getMenu(), HttpStatus.OK);
     }
+
+    @PostMapping("/products")
+    public void addProducts(@RequestBody ProductDTO product) {
+        // TODO: ADD RESPONSE ENTITY.
+        this.productService.addProduct(product.getName(), product.getStartMonth(), product.getEndMonth(), product.getType());
+    }
+
 }
