@@ -38,4 +38,17 @@ public class InventoryService {
         }
     }
 
+    public void addStockByProductId(UUID id, int amount) {
+        Optional<Inventory> item = this.inventoryDAO.findById(id);
+
+        if(item.isPresent()) {
+            this.inventoryDAO.addStockByProductId(id, amount);
+        } else {
+            throw new InventoryNotFoundException("Inventory UUID not found!", id);
+        }
+    }
+
+    public void save(Inventory product) {
+        this.inventoryDAO.save(product);
+    }
 }

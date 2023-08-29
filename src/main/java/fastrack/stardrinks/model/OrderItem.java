@@ -1,15 +1,19 @@
 package fastrack.stardrinks.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 @Embeddable
 public class OrderItem {
 
+    @NotNull(message = "Product ID cannot be null")
     private UUID productId;
 
     @Column(name = "quantity")
+    @Min(value = 1, message = "Item quantity must be at least 1")
     private int itemQuantity;
 
     public OrderItem() {

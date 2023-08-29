@@ -16,6 +16,10 @@ public interface InventoryDAO extends JpaRepository<Inventory, UUID> {
     @Query("UPDATE Inventory i SET i.stock = i.stock - :amount WHERE i.id = :productId")
     void reduceStockByProductId(@Param("productId") UUID productId, @Param("amount") int amount);
 
+    @Modifying
+    @Query("UPDATE Inventory i SET i.stock = i.stock + :amount WHERE i.id = :productId")
+    void addStockByProductId(@Param("productId") UUID productId, @Param("amount") int amount);
+
 //    public default int reduceStockByProductId(UUID productId, int amount) {
 //        return entityManager.createQuery(
 //                        "UPDATE Inventory i SET i.quantity = i.quantity - :amount WHERE i.id = :productId")

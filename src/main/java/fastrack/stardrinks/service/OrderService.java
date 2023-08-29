@@ -34,6 +34,27 @@ public class OrderService {
         }
     }
 
+    @Transactional
+    public void update(Order order) {
+        int id = order.getId();
+        Optional<Order> existingOrder = orderDAO.findById(id);
+
+        if(existingOrder.isPresent()) {
+            for(OrderItem orderItem : existingOrder.get().getOrderItems()) {
+                inventoryService.addStockByProductId(orderItem.getProductId(), orderItem.getItemQuantity());
+            }
+        } else {
+            throw new OrderNotFoundException("Order update failed! Order not found. Provided ID: " + id, id);
+        }
+
+        this.save(order);
+    }
+
+    @Transactional
+    public void delete(Order order) {
+        this.orderDAO.delete(order);
+    }
+
     public List<Order> getAllOrders() {
         return this.orderDAO.findAll();
     }
@@ -47,4 +68,6 @@ public class OrderService {
             throw new OrderNotFoundException("Order with ID " + id + " not found", id);
         }
     }
+
+
 }
