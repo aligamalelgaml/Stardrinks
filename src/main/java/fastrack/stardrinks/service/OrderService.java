@@ -52,6 +52,7 @@ public class OrderService {
 
     @Transactional
     public void delete(int orderId) {
+        // TODO: Consider adding flag for deletion instead of hard delete
         this.orderDAO.delete(this.getOrderById(orderId));
     }
 

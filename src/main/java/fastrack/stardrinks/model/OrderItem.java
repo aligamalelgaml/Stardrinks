@@ -9,6 +9,7 @@ import java.util.UUID;
 @Embeddable
 public class OrderItem {
 
+    // TODO: Rewrite to use Product entity instead of UUID.
     @NotNull(message = "Product ID cannot be null")
     private UUID productId;
 
