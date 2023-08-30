@@ -1,9 +1,6 @@
 package fastrack.stardrinks.controller;
 
-import fastrack.stardrinks.exceptions.InventoryNotFoundException;
-import fastrack.stardrinks.exceptions.OrderMismatchException;
-import fastrack.stardrinks.exceptions.OrderNotFoundException;
-import fastrack.stardrinks.exceptions.StockNotSufficientException;
+import fastrack.stardrinks.exceptions.*;
 import fastrack.stardrinks.response.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -65,6 +62,18 @@ public class GlobalExceptionHandler {
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setMessage(String.format("Order ID mismatch! Provided body order object ID (%d) does not have the expected URI ID (%d)!", exc.getBodyId(), exc.getUriId()));
+        response.setTimeStamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ProductAlreadyExistsResponse> handleException(ProductAlreadyExistsException exc) {
+
+        ProductAlreadyExistsResponse response = new ProductAlreadyExistsResponse();
+
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(String.format("Product with same name found in database! Found ID: %s ", exc.getFoundId().toString()));
         response.setTimeStamp(System.currentTimeMillis());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

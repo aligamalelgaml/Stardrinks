@@ -51,8 +51,8 @@ public class OrderService {
     }
 
     @Transactional
-    public void delete(Order order) {
-        this.orderDAO.delete(order);
+    public void delete(int orderId) {
+        this.orderDAO.delete(this.getOrderById(orderId));
     }
 
     public List<Order> getAllOrders() {

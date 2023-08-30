@@ -51,4 +51,9 @@ public class OrderController {
     public ResponseEntity<Order> getOrderById(@PathVariable int orderId) {
         return new ResponseEntity<>(this.orderService.getOrderById(orderId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{orderId}")
+    public void delete(@PathVariable int orderId) {
+        this.orderService.delete(orderId);
+    }
 }

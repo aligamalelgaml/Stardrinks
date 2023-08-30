@@ -5,6 +5,7 @@ import fastrack.stardrinks.model.base.ResourceType;
 
 import java.time.LocalDate;
 
+@Deprecated
 public class ProductDTO extends Product {
 
     ResourceType type;

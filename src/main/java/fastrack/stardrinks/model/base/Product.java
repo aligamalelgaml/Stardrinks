@@ -1,12 +1,25 @@
 package fastrack.stardrinks.model.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import fastrack.stardrinks.model.CoffeeBean;
+import fastrack.stardrinks.model.Drink;
+import fastrack.stardrinks.model.Goodie;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Drink.class, name = "DRINKS"),
+        @JsonSubTypes.Type(value = CoffeeBean.class, name = "BEANS"),
+        @JsonSubTypes.Type(value = Goodie.class, name = "GOODIES")
+})
 public abstract class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +43,9 @@ public abstract class Product {
         this.startMonth = startMonth;
         this.endMonth = endMonth;
     }
+
+    @JsonProperty("type")
+    public abstract ResourceType getType(); // Return the enum indicating the type
 
     public String getName() {
         return name;

@@ -1,16 +1,14 @@
 package fastrack.stardrinks.service;
 
 import fastrack.stardrinks.exceptions.InventoryNotFoundException;
+import fastrack.stardrinks.exceptions.ProductAlreadyExistsException;
 import fastrack.stardrinks.model.CoffeeBean;
 import fastrack.stardrinks.model.Drink;
 import fastrack.stardrinks.model.Goodie;
 import fastrack.stardrinks.model.Inventory;
 import fastrack.stardrinks.model.base.Product;
 import fastrack.stardrinks.model.base.ResourceType;
-import fastrack.stardrinks.repository.CoffeeBeanDAO;
-import fastrack.stardrinks.repository.DrinkDAO;
-import fastrack.stardrinks.repository.GoodieDAO;
-import fastrack.stardrinks.repository.InventoryDAO;
+import fastrack.stardrinks.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +24,15 @@ public class ProductService {
     DrinkDAO drinkDAO;
     InventoryService inventoryService;
 
+    ProductDAO productDAO;
+
     @Autowired
-    public ProductService(CoffeeBeanDAO coffeeBeanDAO, GoodieDAO goodieDAO, DrinkDAO drinkDAO, InventoryService inventoryService) {
+    public ProductService(CoffeeBeanDAO coffeeBeanDAO, GoodieDAO goodieDAO, DrinkDAO drinkDAO, InventoryService inventoryService, ProductDAO productDAO) {
         this.coffeeBeanDAO = coffeeBeanDAO;
         this.goodieDAO = goodieDAO;
         this.drinkDAO = drinkDAO;
         this.inventoryService = inventoryService;
+        this.productDAO = productDAO;
     }
 
     public List<Drink> getAllDrinks() {
@@ -54,34 +55,28 @@ public class ProductService {
      * @param type Product type
      */
     @Transactional
-    public void addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type, int stock) {
-        UUID generatedUUID = null;
+    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type, int stock) {
+        Optional<Product> existingProduct = this.findProductByName(name);
+        if(existingProduct.isPresent()) {
+            throw new ProductAlreadyExistsException("Product with same name already exists in database! Found ID: ", existingProduct.get().getId());
+        }
+
+        Product newProduct;
 
         switch (type) {
-            case DRINKS -> {
-                Drink drink = new Drink(name, startMonth, endMonth);
-                Drink savedDrink = drinkDAO.save(drink);
-                generatedUUID = savedDrink.getId();
-            }
-            case BEANS -> {
-                CoffeeBean coffeeBean = new CoffeeBean(name, startMonth, endMonth);
-                CoffeeBean savedCoffeeBean = coffeeBeanDAO.save(coffeeBean);
-                generatedUUID = savedCoffeeBean.getId();
-            }
-            case GOODIES -> {
-                Goodie goodie = new Goodie(name, startMonth, endMonth);
-                Goodie savedGoodie = goodieDAO.save(goodie);
-                generatedUUID = savedGoodie.getId();
-            }
+            case DRINKS -> newProduct = this.drinkDAO.save(new Drink(name, startMonth, endMonth));
+            case BEANS -> newProduct = this.coffeeBeanDAO.save(new CoffeeBean(name, startMonth, endMonth));
+            case GOODIES -> newProduct = this.goodieDAO.save(new Goodie(name, startMonth, endMonth));
             default -> throw new IllegalArgumentException("Invalid resource type: " + type);
         }
 
-        this.inventoryService.save(new Inventory(generatedUUID, name, 50));
+        this.inventoryService.save(new Inventory(newProduct.getId(), name, 50));
+        return newProduct;
     }
 
     @Transactional
-    public void addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type) {
-        this.addProduct(name, startMonth, endMonth, type, 50);
+    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type) {
+        return this.addProduct(name, startMonth, endMonth, type, 50);
     }
 
     public List<Product> getAllProducts() {
@@ -134,5 +129,9 @@ public class ProductService {
         menu.put(ResourceType.GOODIES, this.getAllGoodies());
 
         return menu;
+    }
+
+    public Optional<Product> findProductByName(String name) {
+       return this.productDAO.findByName(name);
     }
 }
