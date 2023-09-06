@@ -10,9 +10,8 @@ import java.util.UUID;
 @Embeddable
 public class OrderItem {
 
-    // TODO: Rewrite to use Product entity instead of UUID.
     @NotNull(message = "Product cannot be null")
-    @OneToOne
+    @ManyToOne
     private Product product;
 
     @Column(name = "quantity")

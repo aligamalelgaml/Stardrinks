@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -55,18 +56,18 @@ public class ProductService {
      * @param type Product type
      */
     @Transactional
-    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type, int stock) {
+    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, BigDecimal price, ResourceType type, int stock) {
         Optional<Product> existingProduct = this.findProductByName(name);
-        if(existingProduct.isPresent()) {
+        if (existingProduct.isPresent()) {
             throw new ProductAlreadyExistsException("Product with same name already exists in database! Found ID: ", existingProduct.get().getId());
         }
 
         Product newProduct;
 
         switch (type) {
-            case DRINKS -> newProduct = this.drinkDAO.save(new Drink(name, startMonth, endMonth));
-            case BEANS -> newProduct = this.coffeeBeanDAO.save(new CoffeeBean(name, startMonth, endMonth));
-            case GOODIES -> newProduct = this.goodieDAO.save(new Goodie(name, startMonth, endMonth));
+            case DRINKS -> newProduct = this.drinkDAO.save(new Drink(name, startMonth, endMonth, price));
+            case BEANS -> newProduct = this.coffeeBeanDAO.save(new CoffeeBean(name, startMonth, endMonth, price));
+            case GOODIES -> newProduct = this.goodieDAO.save(new Goodie(name, startMonth, endMonth, price));
             default -> throw new IllegalArgumentException("Invalid resource type: " + type);
         }
 
@@ -75,8 +76,8 @@ public class ProductService {
     }
 
     @Transactional
-    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, ResourceType type) {
-        return this.addProduct(name, startMonth, endMonth, type, 50);
+    public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, BigDecimal price, ResourceType type) {
+        return this.addProduct(name, startMonth, endMonth, price, type, 50);
     }
 
     public List<Product> getAllProducts() {

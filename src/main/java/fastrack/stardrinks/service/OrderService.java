@@ -7,6 +7,7 @@ import fastrack.stardrinks.model.Order;
 import fastrack.stardrinks.repository.InventoryDAO;
 import fastrack.stardrinks.repository.OrderDAO;
 import jakarta.transaction.Transactional;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class OrderService {
 
     @Transactional
     public void save(Order order) {
+        System.out.println(order);
         orderDAO.save(order);
 
         for(OrderItem orderItem : order.getOrderItems()) {

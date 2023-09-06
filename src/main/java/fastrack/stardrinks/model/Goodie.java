@@ -6,13 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "seasonal_goodies")
 public class Goodie extends Product {
-    public Goodie(String name, LocalDate startMonth, LocalDate endMonth) {
-        super(name, startMonth, endMonth);
+    public Goodie(String name, LocalDate startMonth, LocalDate endMonth, BigDecimal price) {
+        super(name, startMonth, endMonth, price);
     }
 
     @Override

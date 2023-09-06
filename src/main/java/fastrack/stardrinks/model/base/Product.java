@@ -7,7 +7,9 @@ import fastrack.stardrinks.model.CoffeeBean;
 import fastrack.stardrinks.model.Drink;
 import fastrack.stardrinks.model.Goodie;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,7 +24,7 @@ import java.util.UUID;
 })
 public abstract class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -35,13 +37,17 @@ public abstract class Product {
     @Column(name = "end_month")
     private LocalDate endMonth;
 
+    @Column(name = "price")
+    private BigDecimal price;
+
     public Product() {
     }
 
-    public Product(String name, LocalDate startMonth, LocalDate endMonth) {
+    public Product(String name, LocalDate startMonth, LocalDate endMonth, BigDecimal price) {
         this.name = name;
         this.startMonth = startMonth;
         this.endMonth = endMonth;
+        this.price = price;
     }
 
     @JsonProperty("type")
@@ -77,6 +83,14 @@ public abstract class Product {
 
     public void setEndMonth(LocalDate endMonth) {
         this.endMonth = endMonth;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override

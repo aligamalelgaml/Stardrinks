@@ -22,7 +22,7 @@ public class InventoryService {
 
     @Transactional
     public void reduceStockByProductId(UUID id, int amount) {
-        Optional<Inventory> item = this.inventoryDAO.findById(id);
+        Optional<Inventory> item = this.inventoryDAO.findByProductId(id);
 
         if(item.isPresent()) {
             int stock = item.get().getStock();

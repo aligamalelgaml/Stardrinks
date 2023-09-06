@@ -8,23 +8,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface InventoryDAO extends JpaRepository<Inventory, UUID> {
 
     @Modifying
-    @Query("UPDATE Inventory i SET i.stock = i.stock - :amount WHERE i.id = :productId")
+    @Query("UPDATE Inventory i SET i.stock = i.stock - :amount WHERE i.product.id = :productId")
     void reduceStockByProductId(@Param("productId") UUID productId, @Param("amount") int amount);
 
     @Modifying
-    @Query("UPDATE Inventory i SET i.stock = i.stock + :amount WHERE i.id = :productId")
+    @Query("UPDATE Inventory i SET i.stock = i.stock + :amount WHERE i.product.id = :productId")
     void addStockByProductId(@Param("productId") UUID productId, @Param("amount") int amount);
 
-//    public default int reduceStockByProductId(UUID productId, int amount) {
-//        return entityManager.createQuery(
-//                        "UPDATE Inventory i SET i.quantity = i.quantity - :amount WHERE i.id = :productId")
-//                .setParameter("amount", amount)
-//                .setParameter("productId", productId)
-//                .executeUpdate();
-//    }
+    Optional<Inventory> findByProductId(UUID productId);
 }

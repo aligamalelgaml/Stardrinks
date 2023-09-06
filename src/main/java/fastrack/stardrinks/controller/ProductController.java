@@ -35,7 +35,7 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<Product> addProducts(@RequestBody Product product) {
-        return new ResponseEntity<>(this.productService.addProduct(product.getName(), product.getStartMonth(), product.getEndMonth(), product.getType()), HttpStatus.OK);
+        return new ResponseEntity<>(this.productService.addProduct(product.getName(), product.getStartMonth(), product.getEndMonth(), product.getPrice(), product.getType()), HttpStatus.OK);
     }
 
 }
