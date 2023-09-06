@@ -1,5 +1,6 @@
 package fastrack.stardrinks.model;
 
+import fastrack.stardrinks.model.base.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -10,8 +11,9 @@ import java.util.UUID;
 public class OrderItem {
 
     // TODO: Rewrite to use Product entity instead of UUID.
-    @NotNull(message = "Product ID cannot be null")
-    private UUID productId;
+    @NotNull(message = "Product cannot be null")
+    @OneToOne
+    private Product product;
 
     @Column(name = "quantity")
     @Min(value = 1, message = "Item quantity must be at least 1")
@@ -20,17 +22,17 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(UUID productId, int quantity) {
-        this.productId = productId;
+    public OrderItem(Product product, int quantity) {
+        this.product = product;
         this.itemQuantity = quantity;
     }
 
-    public UUID getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(UUID productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getItemQuantity() {
@@ -44,8 +46,8 @@ public class OrderItem {
     @Override
     public String toString() {
         return "OrderItem{" +
-                "productId=" + productId +
-                ", quantity=" + itemQuantity +
+                "product=" + product +
+                ", itemQuantity=" + itemQuantity +
                 '}';
     }
 }

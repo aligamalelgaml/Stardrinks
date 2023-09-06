@@ -30,7 +30,7 @@ public class OrderService {
         orderDAO.save(order);
 
         for(OrderItem orderItem : order.getOrderItems()) {
-            inventoryService.reduceStockByProductId(orderItem.getProductId(), orderItem.getItemQuantity());
+            inventoryService.reduceStockByProductId(orderItem.getProduct().getId(), orderItem.getItemQuantity());
         }
     }
 
@@ -41,7 +41,7 @@ public class OrderService {
 
         if(existingOrder.isPresent()) {
             for(OrderItem orderItem : existingOrder.get().getOrderItems()) {
-                inventoryService.addStockByProductId(orderItem.getProductId(), orderItem.getItemQuantity());
+                inventoryService.addStockByProductId(orderItem.getProduct().getId(), orderItem.getItemQuantity());
             }
         } else {
             throw new OrderNotFoundException("Order update failed! Order not found. Provided ID: " + id, id);

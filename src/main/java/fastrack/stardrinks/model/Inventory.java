@@ -1,45 +1,24 @@
 package fastrack.stardrinks.model;
 
+import fastrack.stardrinks.model.base.Product;
 import jakarta.persistence.*;
 
-import java.util.UUID;
 
 @Entity
 public class Inventory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    UUID id;
+    int id;
 
-    @Column(name = "name")
-    String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToOne
+    Product product;
 
     @Column(name = "stock")
     int stock;
 
     public Inventory() {
-    }
-
-    public Inventory(UUID id, String name, int stock) {
-        this.id = id;
-        this.name = name;
-        this.stock = stock;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public int getStock() {
@@ -50,10 +29,24 @@ public class Inventory {
         this.stock = quantity;
     }
 
-    @Override
-    public String toString() {
-        return "Inventory{" +
-                "name='" + name + '\'' +
-                '}';
+    public Inventory(Product product, int stock) {
+        this.product = product;
+        this.stock = stock;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

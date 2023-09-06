@@ -70,7 +70,7 @@ public class ProductService {
             default -> throw new IllegalArgumentException("Invalid resource type: " + type);
         }
 
-        this.inventoryService.save(new Inventory(newProduct.getId(), name, 50));
+        this.inventoryService.save(new Inventory(newProduct, 50));
         return newProduct;
     }
 
