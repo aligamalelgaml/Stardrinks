@@ -49,4 +49,13 @@ public class Inventory {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    @Override
+    public String toString() {
+        return "Inventory{" +
+                "id=" + id +
+                ", product=" + product +
+                ", stock=" + stock +
+                '}';
+    }
 }

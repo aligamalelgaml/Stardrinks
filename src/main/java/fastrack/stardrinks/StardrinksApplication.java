@@ -1,6 +1,7 @@
 package fastrack.stardrinks;
 
 import fastrack.stardrinks.model.base.ResourceType;
+import fastrack.stardrinks.repository.InventoryDAO;
 import fastrack.stardrinks.service.ProductService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

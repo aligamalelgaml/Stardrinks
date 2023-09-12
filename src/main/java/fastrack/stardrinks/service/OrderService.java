@@ -4,16 +4,13 @@ package fastrack.stardrinks.service;
 import fastrack.stardrinks.exceptions.OrderNotFoundException;
 import fastrack.stardrinks.model.OrderItem;
 import fastrack.stardrinks.model.Order;
-import fastrack.stardrinks.repository.InventoryDAO;
 import fastrack.stardrinks.repository.OrderDAO;
 import jakarta.transaction.Transactional;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrderService {

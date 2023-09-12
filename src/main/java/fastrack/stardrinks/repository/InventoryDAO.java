@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,4 +24,6 @@ public interface InventoryDAO extends JpaRepository<Inventory, UUID> {
     void addStockByProductId(@Param("productId") UUID productId, @Param("amount") int amount);
 
     Optional<Inventory> findByProductId(UUID productId);
+
+    Optional<Inventory> findByProductPrice(BigDecimal price);
 }
