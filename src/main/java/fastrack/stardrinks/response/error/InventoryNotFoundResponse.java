@@ -1,4 +1,4 @@
-package fastrack.stardrinks.response;
+package fastrack.stardrinks.response.error;
 
 import fastrack.stardrinks.response.base.ErrorResponse;
 
