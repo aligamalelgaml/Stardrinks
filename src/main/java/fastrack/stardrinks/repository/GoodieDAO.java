@@ -1,6 +1,7 @@
 package fastrack.stardrinks.repository;
 
 import fastrack.stardrinks.model.Goodie;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

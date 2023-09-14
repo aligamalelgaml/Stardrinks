@@ -1,6 +1,7 @@
 package fastrack.stardrinks.config;
 
 import fastrack.stardrinks.repository.UserDAO;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
