@@ -10,6 +10,10 @@ import fastrack.stardrinks.model.base.Product;
 import fastrack.stardrinks.model.base.ResourceType;
 import fastrack.stardrinks.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +28,6 @@ public class ProductService {
     GoodieDAO goodieDAO;
     DrinkDAO drinkDAO;
     InventoryService inventoryService;
-
     ProductDAO productDAO;
 
     @Autowired
@@ -34,6 +37,9 @@ public class ProductService {
         this.drinkDAO = drinkDAO;
         this.inventoryService = inventoryService;
         this.productDAO = productDAO;
+    }
+
+    public ProductService() {
     }
 
     public List<Drink> getAllDrinks() {
@@ -57,7 +63,7 @@ public class ProductService {
      */
     @Transactional
     public Product addProduct(String name, LocalDate startMonth, LocalDate endMonth, BigDecimal price, ResourceType type, int stock) {
-        Optional<Product> existingProduct = this.findProductByName(name);
+        Optional<Product> existingProduct = this.productDAO.findByName(name);
         if (existingProduct.isPresent()) {
             throw new ProductAlreadyExistsException("Product with same name already exists in database! Found ID: ", existingProduct.get().getId());
         }
@@ -122,6 +128,10 @@ public class ProductService {
         }
     }
 
+    public Product findProductById(UUID id) {
+        return this.productDAO.findById(id).orElseThrow(() -> new InventoryNotFoundException(String.format("Could not find provided UUID: %s", id), id));
+    }
+
     public Map<ResourceType, List<? extends Product>> getMenu() {
         Map<ResourceType, List<? extends Product>> menu = new EnumMap<>(ResourceType.class);
 
@@ -132,7 +142,8 @@ public class ProductService {
         return menu;
     }
 
-    public Optional<Product> findProductByName(String name) {
-       return this.productDAO.findByName(name);
+    public Product findProductByName(String name) {
+        // TODO: Add proper exception
+        return this.productDAO.findByName(name).orElseThrow(() -> new RuntimeException("Could not find product with such name"));
     }
 }

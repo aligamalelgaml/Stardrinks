@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Inventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id;
 

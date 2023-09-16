@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InventoryDAO extends JpaRepository<Inventory, UUID> {
+public interface InventoryDAO extends JpaRepository<Inventory, Integer> {
 
     @Modifying
     @Query("UPDATE Inventory i SET i.stock = i.stock - :amount WHERE i.product.id = :productId")

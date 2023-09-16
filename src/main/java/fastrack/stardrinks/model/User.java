@@ -1,6 +1,7 @@
 package fastrack.stardrinks.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fastrack.stardrinks.model.base.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,13 @@ public class User implements UserDetails {
 
     private String email;
 
+    @JsonIgnore
     private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore // Fixes circular reference issue.
+    List<Order> orders;
 
     @Enumerated(EnumType.STRING)
     private Role role;

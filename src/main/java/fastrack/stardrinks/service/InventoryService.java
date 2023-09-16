@@ -39,7 +39,7 @@ public class InventoryService {
     }
 
     public void addStockByProductId(UUID id, int amount) {
-        Optional<Inventory> item = this.inventoryDAO.findById(id);
+        Optional<Inventory> item = this.inventoryDAO.findByProductId(id);
 
         if(item.isPresent()) {
             this.inventoryDAO.addStockByProductId(id, amount);
