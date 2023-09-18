@@ -2,6 +2,7 @@ package fastrack.stardrinks.service;
 
 import fastrack.stardrinks.exceptions.InventoryNotFoundException;
 import fastrack.stardrinks.exceptions.ProductAlreadyExistsException;
+import fastrack.stardrinks.exceptions.ProductNameNotFoundException;
 import fastrack.stardrinks.model.CoffeeBean;
 import fastrack.stardrinks.model.Drink;
 import fastrack.stardrinks.model.Goodie;
@@ -143,7 +144,6 @@ public class ProductService {
     }
 
     public Product findProductByName(String name) {
-        // TODO: Add proper exception
-        return this.productDAO.findByName(name).orElseThrow(() -> new RuntimeException("Could not find product with such name"));
+        return this.productDAO.findByName(name).orElseThrow(() -> new ProductNameNotFoundException(String.format("Could not find product with such name: %s", name), name));
     }
 }

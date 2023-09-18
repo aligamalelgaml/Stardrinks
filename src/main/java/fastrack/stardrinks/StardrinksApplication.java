@@ -1,13 +1,11 @@
 package fastrack.stardrinks;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fastrack.stardrinks.model.Inventory;
-import fastrack.stardrinks.model.Order;
+import fastrack.stardrinks.dto.RegisterDTO;
 import fastrack.stardrinks.model.base.ResourceType;
 import fastrack.stardrinks.repository.InventoryDAO;
-import fastrack.stardrinks.service.InventoryService;
+import fastrack.stardrinks.security.AuthenticationService;
 import fastrack.stardrinks.service.ProductService;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @SpringBootApplication
 public class StardrinksApplication {
@@ -23,14 +20,14 @@ public class StardrinksApplication {
 	public static void main(String[] args) { SpringApplication.run(StardrinksApplication.class, args); }
 
 	@Bean
-	public CommandLineRunner commandLineRunner(ProductService productService, InventoryDAO inventoryDAO) {
-		return runner -> init(productService, inventoryDAO);
+	public CommandLineRunner commandLineRunner(ProductService productService, InventoryDAO inventoryDAO, AuthenticationService authService) {
+		return runner -> init(productService, inventoryDAO, authService);
 	}
 
 	/**
 	 * Simple function used to init the DB.
 	 */
-	private void init(ProductService productService, InventoryDAO inventoryDAO) {
+	private void init(ProductService productService, InventoryDAO inventoryDAO, AuthenticationService authService) {
 		// Beans
 		productService.addProduct("Sumatra", LocalDate.parse("2023-04-01"), LocalDate.parse("2023-09-30"), new BigDecimal("1.4"), ResourceType.BEANS);
 		productService.addProduct("Espresso", LocalDate.parse("2023-02-01"), LocalDate.parse("2023-11-30"), new BigDecimal("1.2"), ResourceType.BEANS);
@@ -55,8 +52,13 @@ public class StardrinksApplication {
 		productService.addProduct("Mango Cheesecake", LocalDate.parse("2023-05-01"), LocalDate.parse("2023-08-31"), new BigDecimal("3.2"), ResourceType.GOODIES);
 		productService.addProduct("Pumpkin Donut", LocalDate.parse("2023-09-01"), LocalDate.parse("2023-11-30"), new BigDecimal("6.2"), ResourceType.GOODIES);
 
-		//
+		// Get a UUID for a generated inventory item.
 		inventoryDAO.findById(1).ifPresent(inventory -> System.out.println(inventory.getProduct().getId()));
+
+		// Grab a token for a generated user.
+		System.out.println(authService.register(RegisterDTO.builder().email("ali.gamal@stardrinks.com").firstName("ali").lastName("gamal").password("banana").build()).getToken());
+
+
 	}
 
 }

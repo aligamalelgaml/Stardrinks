@@ -58,4 +58,10 @@ public class OrderController {
     public void delete(@PathVariable int orderId) {
         this.orderService.delete(orderId);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderDTO>> getOrderByUser(@PathVariable int userId) {
+        return ResponseEntity.ok(this.orderService.getOrderByUser(userId));
+    }
+
 }

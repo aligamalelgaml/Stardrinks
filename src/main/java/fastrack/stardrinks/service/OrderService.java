@@ -8,9 +8,7 @@ import fastrack.stardrinks.model.OrderItem;
 import fastrack.stardrinks.model.Order;
 import fastrack.stardrinks.model.User;
 import fastrack.stardrinks.repository.OrderDAO;
-import fastrack.stardrinks.repository.ProductDAO;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,6 @@ import java.util.Optional;
 @Service
 public class OrderService {
     OrderDAO orderDAO;
-
     ProductService productService;
     UserService userService;
     InventoryService inventoryService;
@@ -39,45 +36,16 @@ public class OrderService {
 
     @Transactional
     public OrderDTO save(OrderDTO orderDTO) {
-        User user = this.userService.findById(orderDTO.getUserId());
-        List<OrderItem> orderItems = this.getRequestOrderItems(orderDTO.getOrderItems());
 
+        Order newOrder = this.mapToEntity(orderDTO);
 
-        Order newOrder = Order.builder().user(user).orderItems(orderItems).build();
         orderDAO.save(newOrder);
 
-        for(OrderItem orderItem : newOrder.getOrderItems()) {
+        for (OrderItem orderItem : newOrder.getOrderItems()) {
             inventoryService.reduceStockByProductId(orderItem.getProduct().getId(), orderItem.getItemQuantity());
         }
 
-        orderDTO.setId(newOrder.getId());
-
-        return orderDTO;
-    }
-
-    /**
-     * Utility function that extracts OrderItems objects from a list of OrderItems data transfer objects.
-     * @param requestOrderItems Order items in data transfer representation.
-     * @return List of actual order item entities.
-     */
-    private List<OrderItem> getRequestOrderItems(List<OrderItemDTO> requestOrderItems) {
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        for (OrderItemDTO requestItem : requestOrderItems) {
-            orderItems.add(OrderItem.builder().product(this.productService.findProductById(requestItem.getProductId())).itemQuantity(requestItem.getItemQuantity()).build());
-        }
-
-        return orderItems;
-    }
-
-    private List<OrderItemDTO> setRequestOrderItems(List<OrderItem> orderItems) {
-        List<OrderItemDTO> requestOrderItems = new ArrayList<>();
-
-        for (OrderItem item : orderItems) {
-            requestOrderItems.add(OrderItemDTO.builder().productId(item.getProduct().getId()).itemQuantity(item.getItemQuantity()).build());
-        }
-
-        return requestOrderItems;
+        return newOrder.mapToDto();
     }
 
     @Transactional
@@ -105,19 +73,45 @@ public class OrderService {
 
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = this.orderDAO.findAll();
-        List<OrderDTO> responseOrders = new ArrayList<>();
-
-        for (Order order : orders) {
-            responseOrders.add(OrderDTO.builder().id(order.getId()).userId(order.getUser().getId()).orderItems(this.setRequestOrderItems(order.getOrderItems())).build());
-        }
-
-        return responseOrders;
+        return orders.stream().map(Order::mapToDto).toList();
     }
 
     public OrderDTO getOrderById(int id) {
         Order order = this.orderDAO.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with ID " + id + " not found", id));
-        return OrderDTO.builder().id(order.getId()).userId(order.getUser().getId()).orderItems(this.setRequestOrderItems(order.getOrderItems())).build();
+        return order.mapToDto();
     }
 
+    public List<OrderDTO> getOrderByUser(int userId) {
+        List<Order> orders = this.orderDAO.findByUserId(userId);
+
+        return orders.stream().map(Order::mapToDto).toList();
+    }
+
+    /**
+     * Maps order requests to order entities.
+     * @param orderDTO Order DTO
+     * @return Order entity
+     */
+    private Order mapToEntity(OrderDTO orderDTO) {
+        User user = this.userService.findById(orderDTO.getUserId());
+        List<OrderItem> orderItems = this.getRequestOrderItems(orderDTO.getOrderItems());
+
+        return Order.builder().user(user).orderItems(orderItems).build();
+    }
+
+    /**
+     * Utility function that extracts OrderItems objects from a list of OrderItems data transfer objects.
+     * @param requestOrderItems Order items in data transfer representation.
+     * @return List of actual order item entities.
+     */
+    private List<OrderItem> getRequestOrderItems(List<OrderItemDTO> requestOrderItems) {
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for (OrderItemDTO requestItem : requestOrderItems) {
+            orderItems.add(OrderItem.builder().product(this.productService.findProductById(requestItem.getProductId())).itemQuantity(requestItem.getItemQuantity()).build());
+        }
+
+        return orderItems;
+    }
 
 }

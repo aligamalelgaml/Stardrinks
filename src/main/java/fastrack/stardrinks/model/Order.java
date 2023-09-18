@@ -1,5 +1,7 @@
 package fastrack.stardrinks.model;
 
+import fastrack.stardrinks.dto.OrderDTO;
+import fastrack.stardrinks.dto.OrderItemDTO;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -14,11 +16,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
 @Entity
 @Table(name = "orders")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,58 +41,22 @@ public class Order {
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
     private List<OrderItem> orderItems;
 
-    public Order(int id, User user, LocalDateTime orderDate, List<OrderItem> orderItems) {
-        this.id = id;
-        this.user = user;
-        this.orderDate = orderDate;
-        this.orderItems = orderItems;
-    }
-
-    public Order() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
     @PrePersist
     private void timestamp() {
         this.orderDate = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", orderItems=" + orderItems +
-                '}';
+    public OrderDTO mapToDto() {
+        List<OrderItemDTO> orderItemDTOs = this.getOrderItems()
+                .stream()
+                .map(OrderItem::mapToDto) // Call mapToDto on each OrderItem
+                .toList();
+
+        return OrderDTO.builder()
+                .id(this.getId())
+                .userId(this.getUser().getId())
+                .orderItems(orderItemDTOs)
+                .build();
     }
+
 }
