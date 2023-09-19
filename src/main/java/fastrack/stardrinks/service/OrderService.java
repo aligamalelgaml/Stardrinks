@@ -81,10 +81,10 @@ public class OrderService {
         return order.mapToDto();
     }
 
-    public List<OrderDTO> getOrderByUser(int userId) {
-        List<Order> orders = this.orderDAO.findByUserId(userId);
+    public List<Order> getOrderByUser(int userId) {
+        return this.orderDAO.findByUserId(userId);
 
-        return orders.stream().map(Order::mapToDto).toList();
+//        return orders.stream().map(Order::mapToDto).toList();
     }
 
     /**

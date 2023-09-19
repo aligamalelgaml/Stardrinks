@@ -27,7 +27,7 @@ public class AuthenticationService {
 
         String jwt = this.jwtUtil.generateToken(newUser);
 
-        return AuthenticationResponse.builder().token(jwt).build();
+        return AuthenticationResponse.builder().token(jwt).username(newUser.getUsername()).userId(newUser.getId()).build();
     }
 
     public AuthenticationResponse login(LoginDTO request) {
@@ -37,6 +37,6 @@ public class AuthenticationService {
 
         String jwt = this.jwtUtil.generateToken(user);
 
-        return AuthenticationResponse.builder().token(jwt).build();
+        return AuthenticationResponse.builder().token(jwt).username(user.getUsername()).userId(user.getId()).build();
     }
 }
