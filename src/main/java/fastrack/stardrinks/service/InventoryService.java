@@ -51,4 +51,9 @@ public class InventoryService {
     public void save(Inventory product) {
         this.inventoryDAO.save(product);
     }
+
+    public Inventory findById(int id) {
+        // TODO: Separate exceptions for UUID / ID mismatch.
+        return inventoryDAO.findById(id).orElseThrow(() -> new InventoryNotFoundException(String.format("Could not find inventory with ID: %d", id), null));
+    }
 }
